@@ -4,7 +4,10 @@
 
         <mat-form-field color="primary">
             <mat-label>Nombre Usuarios</mat-label>
-            <input type="text" matInput [(ngModel)]="usuarioSeleccionado" formControlName="myControl1"
+            <input 
+                type="text" 
+                matInput 
+                [(ngModel)]="usuarioSeleccionado" formControlName="myControl1"
                 [matAutocomplete]="auto1" />
 
             <mat-autocomplete #auto1="matAutocomplete" (optionSelected)='getPosts($event.option.value)'>
@@ -12,7 +15,7 @@
                     {{ option }}
                 </mat-option>
             </mat-autocomplete>
-            
+
         </mat-form-field>
 
         <mat-card-content>
@@ -22,12 +25,3 @@
     </div>
 
 </mat-card>
-<!-- Content Starts -->
-
-<div class="container-wrapper">
-    <div class="container">
-
-    </div>
-</div>
-
-<!-- Content Ends -->

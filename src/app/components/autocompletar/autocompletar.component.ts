@@ -54,8 +54,7 @@ export class AutocompletarComponent implements OnInit {
 
 	CargaDataCombo() {
 
-		this.service.listarUsuarios().subscribe(
-			res => {
+		this.service.listarUsuarios().subscribe(res => {
 				this.response = res;
 				console.log('this.response : ', this.response);
 
@@ -73,8 +72,10 @@ export class AutocompletarComponent implements OnInit {
 	getPosts(userId) {
 		this.codUsuarioSelected = "";
 		console.log('userId : ', userId);
+
 		let userSelected = this.response.filter((resp) => resp.nombreCompleto == userId)[0]
 		console.log('userSelected : ', userSelected)
+
 		this.codUsuarioSelected = userSelected.codUsuario;
 		this.nombreCompletoSelected = userSelected.nombreCompleto;
 

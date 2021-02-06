@@ -2,13 +2,13 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild, ɵConsole } from '@ang
 import { FormControl, FormBuilder, FormGroup, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { CalendarioService } from 'src/app/services/calendario.service';
-import Swal from 'sweetalert2';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
-import swal from 'sweetalert2';
-import { FormComponentBase } from '../../utilidades/form-component-base';
+import { CalendarioService } from 'src/app/services/calendario.service'
+import Swal from 'sweetalert2'
+import { Observable } from 'rxjs'
+import { map, startWith } from 'rxjs/operators'
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete'
+import swal from 'sweetalert2'
+import { FormComponentBase } from '../../utilidades/form-component-base'
 
 @Component({
 	selector: 'app-creardestinatario',
@@ -38,25 +38,33 @@ export class CreardestinatarioComponent extends FormComponentBase implements OnI
 	//usuario: string;
 	usuarioSeleccionado: string;
 	nombreCompletoSelected: string;
+	nombreCompletoSelectedSolo: string;
 	codUsuarioSelected: string;
+
 	//objeto al API
 	dataEnvia: any = {}
 	response: any = [{}]
 	dropdownList = [];
-	formGroupDestinatario: FormGroup;
 	filteredUsuarios: Observable<string[]>;
 	filteredUsuarios2: Set<string>;
 
+	formGroupDestinatario: FormGroup;
+
 	constructor(private fb: FormBuilder, private service: CalendarioService, private router: Router, private ref: ChangeDetectorRef) {
 		super()
-		/*   this.formulario = this.fb.group({
-		codUsuario: new FormControl('')
-	  }); */
-		//this.periodicidad = [];
+
 		this.cmbtareaprogramada = [];
-		//this.CargaDataCombo();
-		this.CargaDataComboTareas();
+
+		this.formGroupDestinatario = new FormGroup({
+			myControl2: new FormControl('', [
+				Validators.required,
+				this.optionNotFound.bind(this),
+			]),
+		});
+
 		this.CargaDataDestinatarios();
+		this.CargaDataComboTareas();
+
 	}
 
 	ngOnInit(): void {
@@ -97,36 +105,21 @@ export class CreardestinatarioComponent extends FormComponentBase implements OnI
 		};
 
 
+		this.filteredUsuarios = this.formGroupDestinatario.controls.myControlDestinatario.valueChanges.pipe(
+			startWith(''),
+			map((value) =>
+				this._filter(value)
+			)
+		);
+
 	}
-
-	/* CargaDataCombo() {
-  
-	  this.service.listartipoperiodicidad().subscribe(
-		res => {
-		  this.response = res;
-		  console.log('this.response : ', this.response);
-		  this.response.forEach(obj => {
-			console.log('obj : ', obj);
-			this.periodicidad.push({
-			  id: obj.idTipoPeriodicidad,
-			  periodo: obj.descTipoPeriodicidad
-			});
-		  });
-		}
-		, err => console.error(err)
-	  );
-  
-	} */
-
 
 	CargaDataComboTareas() {
 
 		this.service.ListarTareasProgramadas().subscribe(
 			res => {
 				this.response = res;
-				console.log('this.response : ', this.response);
 				this.response.forEach(obj => {
-					console.log('obj : ', obj);
 					this.cmbtareaprogramada.push({
 						idTareaProgramada: obj.idTareaProgramada,
 						nombre: obj.nombre
@@ -139,13 +132,14 @@ export class CreardestinatarioComponent extends FormComponentBase implements OnI
 	}
 
 
-
 	onSubmit_Destinatario() {
 
 		this.dataEnvia = {
 			idTareaProgramada: this.cmbtareaprogramadaSeleccionada,
-			//codUsuario:this.usuario,
+			codUsuario: this.codUsuarioSelected,
 			codActivo: 1,
+			nombreUsuario: this.nombreCompletoSelectedSolo,
+			nombreUsuarioSeleccionado: this.nombreCompletoSelected,
 			usuarioCreacion: 'test',
 		}
 
@@ -229,7 +223,6 @@ export class CreardestinatarioComponent extends FormComponentBase implements OnI
 
 	}
 
-
 	Volver() {
 		this.router.navigateByUrl('/destinatarios');
 	}
@@ -237,19 +230,26 @@ export class CreardestinatarioComponent extends FormComponentBase implements OnI
 	getPosts(userId) {
 		this.codUsuarioSelected = "";
 		console.log('userId : ', userId);
-		let userSelected = this.response.filter((resp) => resp.nombreCompleto == userId)[0]
+		console.log('response : ', this.response);
+		console.log('dropdownList : ', this.dropdownList);
+
+		let userSelected = this.dropdownList.filter((resp) => resp.nombreCompleto == userId.nombreCompleto)[0]
 		console.log('userSelected : ', userSelected)
+
 		this.codUsuarioSelected = userSelected.codUsuario;
 		this.nombreCompletoSelected = userSelected.nombreCompleto;
+		this.nombreCompletoSelectedSolo = userSelected.nombreCompleto;
+		console.log('this.codUsuarioSelected : ', this.codUsuarioSelected)
+		console.log('this.nombreCompletoSelected : ', this.nombreCompletoSelected)
+
 
 	}
 
 	// Mat Autocomplete function
 	private _filter(value: string): string[] {
-		const filterValue = value.toLowerCase();
-
+		console.log('Value : ', value)
 		return this.dropdownList.filter(
-			(option) => option.toLowerCase().indexOf(filterValue) === 0
+			(option) => option.nombreCompleto.toLowerCase().indexOf(value) === 0
 		);
 		/*
 		return this.dropdownList.filter(
@@ -261,10 +261,12 @@ export class CreardestinatarioComponent extends FormComponentBase implements OnI
 
 	optionNotFound(control: AbstractControl): { [s: string]: boolean } {
 		const value = control.value;
+		console.log('control.value : ', control.value)
+		console.log('value : ', value)
+
 		this.filteredUsuarios2 = new Set(
 			this.dropdownList.filter(
-				(option) =>
-					option.toLowerCase().indexOf(value.toLowerCase()) >= 0
+				(option) => option.nombreCompleto.toLowerCase().indexOf(value) >= 0
 			)
 		);
 		if (value && !this.filteredUsuarios2.size) {
@@ -272,6 +274,7 @@ export class CreardestinatarioComponent extends FormComponentBase implements OnI
 		}
 		return null;
 	}
+
 
 	CargaDataDestinatarios() {
 
@@ -282,12 +285,13 @@ export class CreardestinatarioComponent extends FormComponentBase implements OnI
 
 				this.response.forEach(obj => {
 					console.log('objUsuarios : ', obj);
-					this.dropdownList.push(obj.nombreCompleto)
+					this.dropdownList.push(obj)
 				});
 			}
 			, err => console.error(err)
 		);
 
 	}
+
 
 }
