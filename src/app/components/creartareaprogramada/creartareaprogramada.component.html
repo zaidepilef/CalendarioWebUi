@@ -1,0 +1,56 @@
+<form  (ngSubmit)="onSubmit_tareaprogramada()" novalidate [formGroup]="formGroupTareaProgramada">
+    <h2>Nueva Tarea Programada</h2>
+
+
+   <mat-card>
+        <mat-card-content>
+    
+    <mat-form-field>
+        <mat-label>Tarea Programada</mat-label>
+        <input matInput spellcheck="false" placeholder="Nombre Tarea Programada" formControlName="nombre">
+
+        <small class="text-danger" *ngIf="formGroupTareaProgramada.get('nombre').hasError('required')">
+            Campo requerido.
+        </small>
+
+        <small class="text-danger" *ngIf="formGroupTareaProgramada.get('nombre').hasError('minlength')">
+            Mínimo de caracteres.
+        </small>
+
+        <small class="text-danger" *ngIf="formGroupTareaProgramada.get('nombre').hasError('maxlength')">
+            Máximo de caracteres.
+        </small>
+    </mat-form-field>
+      
+      </mat-card-content>          
+   </mat-card>
+    
+
+
+    <mat-card>
+        <mat-card-content>
+
+            <mat-form-field>
+                <mat-label>Url</mat-label>
+                 <input matInput spellcheck="false" placeholder="Url" formControlName="url">
+                 <small class="text-danger" *ngIf="formGroupTareaProgramada.get('url').hasError('required')">
+            Campo requerido.
+             </small>
+               <small class="text-danger" *ngIf="formGroupTareaProgramada.get('url').hasError('maxlength')">
+            Máximo de caracteres.
+        </small>
+            </mat-form-field>
+            
+        </mat-card-content>
+      
+
+    </mat-card>
+
+
+ <mat-card-content>
+        <button mat-raised-button color="defaut" (click)="Volver()">Volver</button>
+        <button mat-raised-button color="primary" [disabled]="!formGroupTareaProgramada.valid" type="submit">Guardar</button>
+ </mat-card-content>
+    
+
+</form>

@@ -1,0 +1,53 @@
+
+<mat-card class="example-card">
+    <form (ngSubmit)="onSubmitdestinatario()" novalidate [formGroup]="frmDestinatario">
+    <!-- <div class="margin padding" [formGroup]="frmDestinatario"> -->
+
+       
+        <mat-form-field>
+            <mat-label>Tarea Programada</mat-label>
+            <mat-select [(ngModel)]="cmbtareaprogramadaSeleccionada" formControlName="tareaProgramada"
+            >
+                <mat-option>-Seleccione-</mat-option>
+                <mat-option *ngFor="let tarea of cmbtareaprogramada" [value]="tarea.idTareaProgramada">
+                    {{tarea.nombre}}
+                </mat-option>
+            </mat-select>
+            <small class="text-danger" *ngIf="frmDestinatario.get('tareaProgramada').hasError('required')">
+                Campo requerido.
+            </small>
+        </mat-form-field>
+       
+       
+       
+        <mat-form-field color="primary">
+            <mat-label>Nombre Usuarios</mat-label>
+            <input type="text" matInput [(ngModel)]="usuarioSeleccionado" formControlName="myControlDestinatario" [matAutocomplete]="auto1" />
+            <mat-autocomplete #auto1="matAutocomplete" (optionSelected)='getPosts($event.option.value)'>
+                <mat-option *ngFor="let option of filteredUsuarios | async" [value]="option">
+                    {{ option }}
+                </mat-option>
+            </mat-autocomplete>
+            <small class="text-danger" *ngIf="frmDestinatario.get('myControlDestinatario').hasError('required')">
+                Campo requerido.
+            </small>
+        </mat-form-field>
+
+        <mat-card-content>
+
+         <!--    <button mat-raised-button color="primary" (click)="enviar()"type="button">Enviar</button> -->
+            <button mat-raised-button color="primary" [disabled]="!frmDestinatario.valid" type="submit">Guardar</button>
+        </mat-card-content>
+
+    <!-- </div> -->
+</form>
+</mat-card>
+<!-- Content Starts -->
+
+<!-- <div class="container-wrapper">
+    <div class="container">
+
+    </div>
+</div>
+ -->
+<!-- Content Ends -->

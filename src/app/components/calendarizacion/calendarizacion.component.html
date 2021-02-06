@@ -1,0 +1,67 @@
+<mat-toolbar>
+
+    <h6>Calendarización</h6>
+    <span class="example-spacer"></span>
+  
+  
+  </mat-toolbar>
+  <div></div>
+  &nbsp;&nbsp;
+  &nbsp;&nbsp;<mat-form-field>
+    <mat-label>Buscar</mat-label>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+  </mat-form-field>
+  
+  <div>
+  
+    &nbsp;&nbsp;<button mat-raised-button
+      (click)="exporter.exportTable('xlsx', {fileName:'Calendarizacion'})">Excel</button>
+    <!-- &nbsp;&nbsp;<button mat-raised-button  (click)="exporter.exportTable('csv', {fileName:'tareasProgramadas'})">Csv</button>
+    &nbsp;&nbsp;<button mat-raised-button  (click)="exporter.exportTable('json', {fileName:'tareasProgramadas'})">Json</button> 
+    &nbsp;&nbsp;<button mat-raised-button
+      (click)="exporter.exportTable('txt', {fileName:'tareasProgramadas'})">Txt</button>-->
+    &nbsp;&nbsp;<button mat-raised-button (click)="btnClickNuevo()">Nuevo</button>
+  </div>
+  <div>.</div>
+  <div></div>
+  <div class="mat-elevation-z8">
+    <table mat-table matTableExporter [dataSource]="dataSource" #exporter="matTableExporter" matSort>
+  
+      <ng-container matColumnDef="idTareaProgramada">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id Tarea Programada</th>     
+          <td mat-cell *matCellDef="let element"> {{element.idTareaProgramada}} 
+          <button (click)="editTareaItem(element)">Editar</button>
+          <button (click)="borrarTareaItem(element)">Elimar</button>
+        </td>
+      </ng-container>
+    
+  <ng-container matColumnDef="nombreTareaProgramada">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Tarea Programada</th>
+        <td mat-cell *matCellDef="let element"> {{element.nombreTareaProgramada}} </td>
+      </ng-container>
+  
+  
+      <ng-container matColumnDef="codPeriodicidadProceso">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>IdPeriodicidad</th>
+        <td mat-cell *matCellDef="let element"> {{element.codPeriodicidadProceso}} </td>
+      </ng-container>
+  
+      
+      <ng-container matColumnDef="nombrePeriodicidad">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>TipoPeriodicidad</th>
+        <td mat-cell *matCellDef="let element"> {{element.nombrePeriodicidad}} </td>
+      </ng-container>
+  
+      
+  
+      <!-- <ng-container matColumnDef="url">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>url</th>
+        <td mat-cell *matCellDef="let element"> {{element.url}} </td>
+      </ng-container> -->
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>

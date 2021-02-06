@@ -1,0 +1,33 @@
+<mat-card class="example-card">
+
+    <div class="margin padding" [formGroup]="myFormGroup1">
+
+        <mat-form-field color="primary">
+            <mat-label>Nombre Usuarios</mat-label>
+            <input type="text" matInput [(ngModel)]="usuarioSeleccionado" formControlName="myControl1"
+                [matAutocomplete]="auto1" />
+
+            <mat-autocomplete #auto1="matAutocomplete" (optionSelected)='getPosts($event.option.value)'>
+                <mat-option *ngFor="let option of filteredOptions1 | async" [value]="option">
+                    {{ option }}
+                </mat-option>
+            </mat-autocomplete>
+            
+        </mat-form-field>
+
+        <mat-card-content>
+            <button mat-raised-button color="primary" (click)="enviar()" type="button">Enviar</button>
+        </mat-card-content>
+
+    </div>
+
+</mat-card>
+<!-- Content Starts -->
+
+<div class="container-wrapper">
+    <div class="container">
+
+    </div>
+</div>
+
+<!-- Content Ends -->
