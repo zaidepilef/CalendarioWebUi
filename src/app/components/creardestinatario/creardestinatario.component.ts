@@ -229,19 +229,12 @@ export class CreardestinatarioComponent extends FormComponentBase implements OnI
 
 	getPosts(userId) {
 		this.codUsuarioSelected = "";
-		console.log('userId : ', userId);
-		console.log('response : ', this.response);
-		console.log('dropdownList : ', this.dropdownList);
 
 		let userSelected = this.dropdownList.filter((resp) => resp.nombreCompleto == userId.nombreCompleto)[0]
-		console.log('userSelected : ', userSelected)
 
 		this.codUsuarioSelected = userSelected.codUsuario;
 		this.nombreCompletoSelected = userSelected.nombreCompleto;
 		this.nombreCompletoSelectedSolo = userSelected.nombreCompleto;
-		console.log('this.codUsuarioSelected : ', this.codUsuarioSelected)
-		console.log('this.nombreCompletoSelected : ', this.nombreCompletoSelected)
-
 
 	}
 
