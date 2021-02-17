@@ -1,52 +1,62 @@
-<form  (ngSubmit)="onSubmit_Destinatario()" novalidate [formGroup]="formGroupDestinatario">
-    <h2>Editar Destinatario</h2>
+<mat-card class="example-card">
+    <form (ngSubmit)="onSubmit_Destinatario()" novalidate [formGroup]="formGroupDestinatario">
+        <h2>Nuevo Destinatario</h2>
+
+        <mat-card>
+            <mat-card-content>
+
+                <mat-form-field>
+                    <mat-label>Tarea Programada</mat-label>
+                    <mat-select [(ngModel)]="cmbtareaprogramadaSeleccionada" formControlName="idTareaProgramada">
+                        <mat-option>-Seleccione-</mat-option>
+                        <mat-option *ngFor="let tarea of cmbtareaprogramada" [value]="tarea.idTareaProgramada">
+                            {{tarea.nombre}}
+                        </mat-option>
+                    </mat-select>
+
+                    <small class="text-danger"
+                        *ngIf="formGroupDestinatario.get('idTareaProgramada').hasError('required')">
+                        Campo requerido.
+                    </small>
 
 
-   <mat-card>
+                </mat-form-field>
+
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+            <mat-card-content>
+                <mat-form-field color="primary">
+
+                    <mat-label>Nombre Usuarios</mat-label>
+
+                    <input type="text" matInput [(ngModel)]="nombreCompletoSelected"
+                        formControlName="myControlDestinatario" [matAutocomplete]="auto1" />
+
+                    <mat-autocomplete #auto1="matAutocomplete" (optionSelected)='getPosts($event.option.value)'>
+                        <mat-option *ngFor="let option of filteredUsuarios | async" [value]="option">
+                            {{ option.nombreCompleto }}
+                        </mat-option>
+                    </mat-autocomplete>
+
+                    <small class="text-danger"
+                        *ngIf="formGroupDestinatario.get('myControlDestinatario').hasError('required')">
+                        Campo requerido.
+                    </small>
+
+
+                </mat-form-field>
+
+            </mat-card-content>
+        </mat-card>
+
         <mat-card-content>
-    
-      <mat-form-field>
-                <mat-label>Tarea Programada</mat-label>
-                <mat-select [(ngModel)]="cmbtareaprogramadaSeleccionada" formControlName="idTareaProgramada"
-                    >
-                    <mat-option>-Seleccione-</mat-option>
-                    <mat-option *ngFor="let tarea of cmbtareaprogramada" [value]="tarea.idTareaProgramada">
-                        {{tarea.nombre}}
-                    </mat-option>
-                </mat-select>
-                
-                <small class="text-danger" *ngIf="formGroupDestinatario.get('idTareaProgramada').hasError('required')">
-            Campo requerido.
-        </small>
-            </mat-form-field>
-      
-      </mat-card-content>          
-   </mat-card>
-    
-
-     <mat-card>
-        <mat-card-content>
-
-            <mat-form-field>
-                <mat-label>Usuario</mat-label>
-                 <input matInput spellcheck="false" [(ngModel)]="usuario" placeholder="Usuario" formControlName="codUsuario">
-                 <small class="text-danger" *ngIf="formGroupDestinatario.get('codUsuario').hasError('required')">
-            Campo requerido.
-             </small>
-           
-            </mat-form-field>
-            
+            <button mat-raised-button color="defaut" (click)="Volver()">Volver</button>
+            <button mat-raised-button color="primary" [disabled]="!formGroupDestinatario.valid"
+                type="submit">Guardar</button>
         </mat-card-content>
-      
 
-    </mat-card>
-   
-   
 
- <mat-card-content>
-        <button mat-raised-button color="defaut" (click)="Volver()">Volver</button>
-        <button mat-raised-button color="primary" [disabled]="!formGroupDestinatario.valid" type="submit">Guardar</button>
- </mat-card-content>
-    
-
-</form>
+    </form>
+</mat-card>
