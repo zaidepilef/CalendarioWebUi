@@ -121,9 +121,6 @@ export class EditardestinatarioComponent extends FormComponentBase implements On
 			)
 		);
 
-
-
-
 	}
 
 	CargaDataComboTareas() {
@@ -176,15 +173,17 @@ export class EditardestinatarioComponent extends FormComponentBase implements On
 
 		var selecteCode = this.dropdownList.filter((x) => x.nombreCompleto == _nombresillo.trim())
 		console.log('selecteCode : ', selecteCode[0]);
-
-		var incognita = "Hola como estas"
-		console.log(incognita.replace(/ /g, ""));
-
+		var code = '';
+		if (selecteCode) {
+			code = selecteCode[0];
+		} else {
+			code = '0'
+		}
 
 
 		this.dataEnvia = {
 			idTareaProgramada: this.cmbtareaprogramadaSeleccionada,
-			codUsuario: selecteCode[0].codUsuario,
+			codUsuario: code || '',
 			codActivo: 1,
 			nombreUsuario: this.nombreCompletoSelectedSolo,
 			nombreUsuarioSeleccionado: this.nombreCompletoSelected,
